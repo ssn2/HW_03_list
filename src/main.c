@@ -14,33 +14,44 @@
 #include "../inc/kernel_stack.h"
 
 
-/*extern ssize_t push_show(struct device *dev, struct device_attribute *attr, char *buf);
-extern ssize_t push_store(struct device *dev, struct device_attribute *attr, 
-                          const char *buf, size_t count);*/
 
 static struct kobject *kobj;
-
-DEVICE_ATTR_RW(push);
+static struct attribute *attrs[] = {
+	&dev_attr_push.attr,
+	&dev_attr_pop.attr,
+	&dev_attr_peek.attr,
+	&dev_attr_size.attr,
+	&dev_attr_is_empty.attr,
+	&dev_attr_clear.attr,
+	NULL,
+};
+    
+static struct attribute_group attr_group = {
+	.attrs = attrs,
+};
 
 
 static int __init listmod_init(void)
 {
-    pr_info("Init\n");
-//    stack_pop();
-//    struct device *dev;
-    int ret;
+	stack_init();
+	int ret;
 
 
-    kobj = kobject_create_and_add("kernel_stack", kernel_kobj);
-    ret = sysfs_create_file(kobj, &dev_attr_push.attr);
+	kobj = kobject_create_and_add("kernel_stack", kernel_kobj);
+
+	ret = sysfs_create_group(kobj, &attr_group);
+
+	pr_info("Init\n");
 
     return 0;
 }
 
 static void __exit listmod_exit(void)
 {
-    kobject_put(kobj);
-    pr_info("Exit\n");
+	sysfs_remove_group(kobj, &attr_group);
+	kobject_put(kobj);
+	
+	pr_info("Exit\n");
 }
 
 module_init(listmod_init);

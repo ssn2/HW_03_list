@@ -13,28 +13,39 @@
 #include <linux/kernel.h>
 #include <linux/device.h>
 
-/* Добавить элемент, передав целое число */
-//static int push;
+/*
+ * Аттрибуты модуля в sysfs и функции для работы с ними
+ *
+ * push:     добавить элемент передав целое число
+ * pop:      получить элемент и удалить его из стека
+ * peek:     получить значение из вершины стека
+ * size:     получить текущее количество элеменов стека
+ * is_empty: проверить наполененность стека. 0 - пуст, 1 - нет
+ * clear:    очистить передав любое значение
+ * 
+ */
+extern struct device_attribute dev_attr_push;
+extern ssize_t push_store(struct device *dev, struct device_attribute *attr, 
+		const char *buf, size_t count);
 
-/* Получить элемент и удалить его из стека */
-//static int read;
+extern struct device_attribute dev_attr_pop;
+extern ssize_t pop_show(struct device *dev, struct device_attribute *attr, 
+		char *buf);
 
-/* Получить значение вершины стека */
-//static int peek;
+extern struct device_attribute dev_attr_peek;
+extern ssize_t peek_show(struct device *dev, struct device_attribute *attr, 
+		char *buf);
 
-/* Получить текущее количество элементов стека */
-//static int size;
+extern struct device_attribute dev_attr_size;
+extern ssize_t size_show(struct device *dev, struct device_attribute *attr, 
+		char *buf);
 
-/* Проверить наполненность стека. 0 - пуст, 1 - нет */
-//static unsigned char is_empty;
+extern struct device_attribute dev_attr_is_empty;
+extern ssize_t is_empty_show(struct device *dev, struct device_attribute *attr,
+		char *buf);
 
-/* Очистить стек передав любое значние */
-//static char write;
-
-
-/* Функции для sysfs */
-ssize_t push_show(struct device *dev, struct device_attribute *attr, char *buf);
-ssize_t push_store(struct device *dev, struct device_attribute *attr, 
+extern struct device_attribute dev_attr_clear;
+extern ssize_t clear_store(struct device *dev, struct device_attribute *attr, 
                     const char *buf, size_t count);
 
 
