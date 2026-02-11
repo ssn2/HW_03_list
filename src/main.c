@@ -1,5 +1,7 @@
 /* 
-Ну типо поехали связанные списки ядра изучать!
+ * Ну типо поехали связанные списки ядра изучать!
+ * main.c - собственно загрузка модуля, настройка 
+ * на работу с sysfs
 */
 
 #define pr_fmt(fmt) KBUILD_MODNAME ":" fmt
@@ -50,7 +52,7 @@ static void __exit listmod_exit(void)
 {
 	sysfs_remove_group(kobj, &attr_group);
 	kobject_put(kobj);
-	
+	stack_clear();
 	pr_info("Exit\n");
 }
 

@@ -1,3 +1,9 @@
+/*
+ * stack.h
+ * Заголовочный файл работы со стеком
+ */
+
+
 #include <linux/list.h>
 
 #define STACK_OK          0      /* Операция успешна */

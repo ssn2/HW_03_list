@@ -1,6 +1,6 @@
 /*
- *
- *
+ * stack.c
+ * Реализация функиций работы со стеком
  */
 
 #define pr_fmt(fmt) KBUILD_MODNAME ":" fmt
@@ -44,17 +44,40 @@ int stack_push(int value)
 
 int stack_pop(void)
 {
-	return 0;
+	struct stack_entry *item;
+	int _value;
+
+	if (list_empty(&mystack.elements) || mystack.size == 0){
+		pr_err("Ошибка - стек пуст\n");
+		return STACK_EMPTY;
+	}
+
+	item = list_first_entry(&mystack.elements, struct stack_entry, list);
+	_value = item->data;
+	list_del(&item->list);
+	kfree(item);
+	mystack.size--;
+	pr_info("Вынут элемент: %d. Размер стека: %d\n", _value, mystack.size);
+
+	return _value;
 }
 
 int stack_peek()
 {
-	return 0;
+	struct stack_entry *item;
+	if (list_empty(&mystack.elements) || mystack.size == 0){
+		pr_err("Ошибка - стек пуст\n");
+		return STACK_EMPTY;
+	}
+
+	item = list_first_entry(&mystack.elements, struct stack_entry, list);
+	pr_info("На вершине стека: %d\n", item->data);
+	return item->data;
 }
 
 int stack_is_empty()
 {
-	return 0;
+	return mystack.size == 0;
 }
 
 int stack_size()
@@ -62,8 +85,16 @@ int stack_size()
 	return mystack.size;
 }
 
-void stack_clear()
+void stack_clear(void)
 {
-	return;
+	struct stack_entry *item, *tmp;
+
+	list_for_each_entry_safe(item, tmp, &mystack.elements, list) {
+		list_del(&item->list);
+		kfree(item);
+	}
+
+	mystack.size = 0;
+	pr_info("Cтек очищен\n");
 }
 
