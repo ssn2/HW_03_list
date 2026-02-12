@@ -13,8 +13,6 @@ BUILD_FILES += $(PWD)/*.ko
 SOURCES := $(SRC_DIR)/*.c
 
 
-ccflag-y += -DDEBUG 
-
 CLANG_FORMAT_VER ?= 19
 CLANG_FORMAT := clang-format-$(CLANG_FORMAT_VER)
 CLANG_FORMAT_FLAGS += -i

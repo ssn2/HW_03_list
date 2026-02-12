@@ -26,6 +26,10 @@
  * clear:    очистить передав любое значение
  * 
  */
+
+void mod_sysfs_init(void);
+void mod_sysfs_close(void);
+
 extern struct device_attribute dev_attr_push;
 extern ssize_t push_store(struct device *dev, struct device_attribute *attr, 
 		const char *buf, size_t count);

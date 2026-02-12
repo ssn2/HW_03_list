@@ -8,9 +8,42 @@
 #include <linux/kobject.h>
 #include <linux/module.h>
 #include <linux/sysfs.h>
+#include <linux/kobject.h>
 
-#include "../inc/kernel_stack.h"
-#include "../lib/inc/stack.h"
+#include <kernel_stack.h>
+#include <stack.h>
+
+/* 
+ * Тут мы инициализируем переменные для групповой регистрации 
+ * аттрибутов-файлов
+ */
+static struct kobject *kobj;
+static struct attribute *attrs[] = {
+        &dev_attr_push.attr,
+        &dev_attr_pop.attr,
+        &dev_attr_peek.attr,
+        &dev_attr_size.attr,
+        &dev_attr_is_empty.attr,
+        &dev_attr_clear.attr,
+        NULL,
+};
+    
+static struct attribute_group attr_group = {
+        .attrs = attrs,
+};
+
+/* Инициализиуем наш участок sysfs */
+void mod_sysfs_init(void){
+	int ret;
+	kobj = kobject_create_and_add("kernel_stack", kernel_kobj);
+	ret = sysfs_create_group(kobj, &attr_group);
+}
+
+/* Освобождаем ресурсы sysfs */
+void mod_sysfs_closw(void){
+	sysfs_remove_group(kobj, &attr_group);
+	kobject_put(kobj);
+}
 
 /* Всё для работы через push */
 DEVICE_ATTR_WO(push);
@@ -54,7 +87,9 @@ ssize_t pop_show(struct device *dev,
 	if (ret == STACK_EMPTY)
 		return -EPERM;
 	
-	return sprintf(buf, "%d\n", ret);
+	return sysfs_emit(buf,
+		"%d\n",
+		ret);
 }
 
 /* Всё для работы через peek */

@@ -47,7 +47,7 @@ int stack_pop(void)
 	struct stack_entry *item;
 	int _value;
 
-	if (list_empty(&mystack.elements) || mystack.size == 0){
+	if (list_empty(&mystack.elements)){
 		pr_err("Ошибка - стек пуст\n");
 		return STACK_EMPTY;
 	}
@@ -65,7 +65,7 @@ int stack_pop(void)
 int stack_peek()
 {
 	struct stack_entry *item;
-	if (list_empty(&mystack.elements) || mystack.size == 0){
+	if (list_empty(&mystack.elements)){
 		pr_err("Ошибка - стек пуст\n");
 		return STACK_EMPTY;
 	}
